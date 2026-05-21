@@ -98,7 +98,8 @@ ha-card {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: black;
+  opacity: 0.35;
   border-radius: inherit;
   z-index: -1;
   pointer-events: none;
@@ -266,7 +267,8 @@ ha-card {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: black;
+  opacity: 0.3;
   border-radius: inherit;
   z-index: -1;
   pointer-events: none;
@@ -314,7 +316,8 @@ ha-card {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(255, 255, 255, 0.025);
+  background-color: white;
+  opacity: 0.025;
   border-radius: inherit;
   z-index: -1;
   pointer-events: none;
@@ -853,101 +856,121 @@ ha-card {
   paint-order: stroke;
 }
 
-/* ---- WebView 128 debug overlay (rc3) -------------------------------------
-   Positioned over the .weather header (same parent compositing context as
-   the broken chips). Each test box uses a different paint strategy so we
-   can visually identify which approaches the Shelly Wall Display WebView
-   actually paints correctly. Remove this block once the bug is solved.
+/* ---- WebView 128 debug overlay (rc4) -------------------------------------
+   Placed at the bottom of the .weather header, directly over the weather
+   background-image (NO container background — boxes float over the sky
+   so any successful paint contrasts clearly).
+
+   Test colors are WHITE because the Shelly's typical weather image is a
+   dark night sky; a working white-ish paint will be obvious against it,
+   and a failed paint lets the dark sky show through. The strategy being
+   tested is what matters, not the color.
+
+   Remove this block once the bug is solved.
 */
 .weather .debug-overlay {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 4px 6px;
-  background: rgb(20, 20, 20);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 9px;
-  line-height: 1.1;
+  gap: 8px;
   z-index: 10;
   pointer-events: none;
   user-select: none;
-}
-
-.weather .debug-overlay .debug-overlay-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.weather .debug-overlay .debug-overlay-tag {
-  background: rgb(220, 50, 50);
-  color: white;
-  font-weight: bold;
-  padding: 1px 4px;
-  border-radius: 3px;
-}
-
-.weather .debug-overlay .debug-overlay-ua {
-  font-weight: normal;
-  opacity: 0.85;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 110px;
-}
-
-.weather .debug-overlay .debug-test {
-  width: 22px;
-  height: 18px;
-  border: 1px dashed yellow;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
-  color: white;
-  text-shadow: 0 0 2px black, 0 0 2px black;
   box-sizing: border-box;
 }
 
-/* Each test uses a DIFFERENT paint strategy with the SAME rgba color
-   (rgba(0,0,0,0.5)) so we can visually compare. */
-.weather .debug-overlay .debug-test-solid {
-  background-color: rgb(80, 80, 80);
+.weather .debug-overlay .debug-overlay-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.weather .debug-overlay .debug-test-rgba {
-  background-color: rgba(0, 0, 0, 0.5);
+
+.weather .debug-overlay .debug-overlay-tag {
+  background-color: rgb(220, 40, 40);
+  color: white;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  flex: 0 0 auto;
 }
-.weather .debug-overlay .debug-test-grad {
-  background-color: transparent;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+
+.weather .debug-overlay .debug-overlay-ua-full {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10px;
+  color: white;
+  word-break: break-all;
+  text-shadow: 0 0 4px black, 0 0 4px black, 0 0 4px black;
+  flex: 1 1 auto;
+  min-width: 0;
 }
-.weather .debug-overlay .debug-test-shadow {
-  background-color: transparent;
-  box-shadow: inset 0 0 0 200px rgba(0, 0, 0, 0.5);
+
+.weather .debug-overlay .debug-overlay-tests {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-.weather .debug-overlay .debug-test-pseudo {
-  background-color: transparent;
+
+.weather .debug-overlay .debug-test {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 36px;
+  border: 2px solid yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 11px;
+  color: yellow;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
+  box-sizing: border-box;
   position: relative;
+}
+
+/* CTRL: solid white — control. SHOULD always appear as a flat white box. */
+.weather .debug-overlay .debug-test-ctrl {
+  background-color: rgb(255, 255, 255);
+}
+/* R: rgba directly on the element (the broken baseline). */
+.weather .debug-overlay .debug-test-rgba {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+/* P-R: pseudo-element with rgba background — rc3's approach. */
+.weather .debug-overlay .debug-test-pseudo-rgba {
+  background-color: transparent;
   z-index: 0;
 }
-.weather .debug-overlay .debug-test-pseudo::before {
+.weather .debug-overlay .debug-test-pseudo-rgba::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   z-index: -1;
 }
-.weather .debug-overlay .debug-test-opacity {
-  background-color: black;
-  opacity: 0.5;
+/* P-O: pseudo-element with SOLID white background + opacity. The
+   compositor-level path. This is the rc4 candidate fix. */
+.weather .debug-overlay .debug-test-pseudo-opacity {
+  background-color: transparent;
+  z-index: 0;
 }
-.weather .debug-overlay .debug-test-opacity > span {
-  opacity: 2;
+.weather .debug-overlay .debug-test-pseudo-opacity::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: white;
+  opacity: 0.5;
+  z-index: -1;
+}
+/* E-O: opacity applied to the entire test element (solid white bg +
+   opacity 0.5 on the element). Both background AND label/border should
+   look semi-transparent — confirms compositor opacity path. */
+.weather .debug-overlay .debug-test-elem-opacity {
+  background-color: white;
+  opacity: 0.5;
 }
 /* ---- end WebView 128 debug overlay ------------------------------------- */

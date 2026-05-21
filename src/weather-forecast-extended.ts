@@ -972,24 +972,21 @@ export class WeatherForecastExtended extends LitElement {
       </div>
     `;
 
-    const debugChromeVersion = (typeof navigator !== "undefined" && navigator.userAgent)
-      ? (navigator.userAgent.match(/Chrome\/([\d.]+)/)?.[1]
-          ?? navigator.userAgent.match(/Version\/([\d.]+)/)?.[1]
-          ?? "no-chrome")
-      : "no-nav";
+    const debugFullUA = (typeof navigator !== "undefined" && navigator.userAgent)
+      ? navigator.userAgent
+      : "no-navigator";
     const debugOverlayTemplate = html`
       <div class="debug-overlay">
-        <div class="debug-overlay-row debug-overlay-version">
-          <span class="debug-overlay-tag">rc3</span>
-          <span class="debug-overlay-ua">${debugChromeVersion}</span>
+        <div class="debug-overlay-header">
+          <span class="debug-overlay-tag">rc4</span>
+          <span class="debug-overlay-ua-full">${debugFullUA}</span>
         </div>
-        <div class="debug-overlay-row debug-overlay-tests">
-          <div class="debug-test debug-test-solid">S</div>
+        <div class="debug-overlay-tests">
+          <div class="debug-test debug-test-ctrl">CTRL</div>
           <div class="debug-test debug-test-rgba">R</div>
-          <div class="debug-test debug-test-grad">G</div>
-          <div class="debug-test debug-test-shadow">B</div>
-          <div class="debug-test debug-test-pseudo">P</div>
-          <div class="debug-test debug-test-opacity"><span>O</span></div>
+          <div class="debug-test debug-test-pseudo-rgba">P-R</div>
+          <div class="debug-test debug-test-pseudo-opacity">P-O</div>
+          <div class="debug-test debug-test-elem-opacity"><span class="debug-test-label">E-O</span></div>
         </div>
       </div>
     `;
