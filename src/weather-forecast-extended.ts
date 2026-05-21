@@ -972,6 +972,28 @@ export class WeatherForecastExtended extends LitElement {
       </div>
     `;
 
+    const debugChromeVersion = (typeof navigator !== "undefined" && navigator.userAgent)
+      ? (navigator.userAgent.match(/Chrome\/([\d.]+)/)?.[1]
+          ?? navigator.userAgent.match(/Version\/([\d.]+)/)?.[1]
+          ?? "no-chrome")
+      : "no-nav";
+    const debugOverlayTemplate = html`
+      <div class="debug-overlay">
+        <div class="debug-overlay-row debug-overlay-version">
+          <span class="debug-overlay-tag">rc3</span>
+          <span class="debug-overlay-ua">${debugChromeVersion}</span>
+        </div>
+        <div class="debug-overlay-row debug-overlay-tests">
+          <div class="debug-test debug-test-solid">S</div>
+          <div class="debug-test debug-test-rgba">R</div>
+          <div class="debug-test debug-test-grad">G</div>
+          <div class="debug-test debug-test-shadow">B</div>
+          <div class="debug-test debug-test-pseudo">P</div>
+          <div class="debug-test debug-test-opacity"><span>O</span></div>
+        </div>
+      </div>
+    `;
+
     return html`
       <ha-card style=${cardStyle}>
         ${showHeader
@@ -1006,6 +1028,7 @@ export class WeatherForecastExtended extends LitElement {
                     ${showInlineNowcast ? nowcastPanelTemplate : nothing}
                   `}
               </div>
+              ${debugOverlayTemplate}
             </div>
           `
           : nothing}

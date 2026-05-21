@@ -19,6 +19,7 @@ ha-card {
   color: white;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .weather.header-only {
@@ -80,7 +81,6 @@ ha-card {
   font-size: var(--ha-font-size-m);
   line-height: calc(6px + var(--ha-font-size-m));
   background-color: transparent;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35));
   padding: 4px 12px;
   border-radius: 25px;
   color: inherit;
@@ -90,6 +90,18 @@ ha-card {
   align-items: center;
   align-self: flex-start;
   overflow: hidden;
+  position: relative;
+  z-index: 0;
+}
+
+.weather .attribute-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .weather .attribute-chip .chip-icon,
@@ -240,13 +252,24 @@ ha-card {
 
 .weather .nowcast-panel {
   background-color: transparent;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
   border-radius: 16px;
   padding: 12px 12px 6px 12px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
+  position: relative;
+  z-index: 0;
+}
+
+.weather .nowcast-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .weather wfe-nowcast {
@@ -276,7 +299,6 @@ ha-card {
 .weather .nowcast-bar {
   flex: 1 1 0;
   background-color: transparent;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.025));
   border-radius: 999px;
   display: flex;
   align-items: flex-end;
@@ -284,6 +306,18 @@ ha-card {
   min-height: 6px;
   height: auto;
   align-self: stretch;
+  position: relative;
+  z-index: 0;
+}
+
+.weather .nowcast-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.025);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .weather .nowcast-bar-fill {
@@ -818,3 +852,102 @@ ha-card {
   stroke-width: 1;
   paint-order: stroke;
 }
+
+/* ---- WebView 128 debug overlay (rc3) -------------------------------------
+   Positioned over the .weather header (same parent compositing context as
+   the broken chips). Each test box uses a different paint strategy so we
+   can visually identify which approaches the Shelly Wall Display WebView
+   actually paints correctly. Remove this block once the bug is solved.
+*/
+.weather .debug-overlay {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 6px;
+  background: rgb(20, 20, 20);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 9px;
+  line-height: 1.1;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+}
+
+.weather .debug-overlay .debug-overlay-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.weather .debug-overlay .debug-overlay-tag {
+  background: rgb(220, 50, 50);
+  color: white;
+  font-weight: bold;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.weather .debug-overlay .debug-overlay-ua {
+  font-weight: normal;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
+}
+
+.weather .debug-overlay .debug-test {
+  width: 22px;
+  height: 18px;
+  border: 1px dashed yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black, 0 0 2px black;
+  box-sizing: border-box;
+}
+
+/* Each test uses a DIFFERENT paint strategy with the SAME rgba color
+   (rgba(0,0,0,0.5)) so we can visually compare. */
+.weather .debug-overlay .debug-test-solid {
+  background-color: rgb(80, 80, 80);
+}
+.weather .debug-overlay .debug-test-rgba {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.weather .debug-overlay .debug-test-grad {
+  background-color: transparent;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+.weather .debug-overlay .debug-test-shadow {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 200px rgba(0, 0, 0, 0.5);
+}
+.weather .debug-overlay .debug-test-pseudo {
+  background-color: transparent;
+  position: relative;
+  z-index: 0;
+}
+.weather .debug-overlay .debug-test-pseudo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+.weather .debug-overlay .debug-test-opacity {
+  background-color: black;
+  opacity: 0.5;
+}
+.weather .debug-overlay .debug-test-opacity > span {
+  opacity: 2;
+}
+/* ---- end WebView 128 debug overlay ------------------------------------- */
