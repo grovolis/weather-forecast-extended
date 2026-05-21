@@ -972,22 +972,9 @@ export class WeatherForecastExtended extends LitElement {
       </div>
     `;
 
-    const debugFullUA = (typeof navigator !== "undefined" && navigator.userAgent)
-      ? navigator.userAgent
-      : "no-navigator";
     const debugOverlayTemplate = html`
       <div class="debug-overlay">
-        <div class="debug-overlay-header">
-          <span class="debug-overlay-tag">rc4</span>
-          <span class="debug-overlay-ua-full">${debugFullUA}</span>
-        </div>
-        <div class="debug-overlay-tests">
-          <div class="debug-test debug-test-ctrl">CTRL</div>
-          <div class="debug-test debug-test-rgba">R</div>
-          <div class="debug-test debug-test-pseudo-rgba">P-R</div>
-          <div class="debug-test debug-test-pseudo-opacity">P-O</div>
-          <div class="debug-test debug-test-elem-opacity"><span class="debug-test-label">E-O</span></div>
-        </div>
+        <span class="debug-overlay-tag">rc5</span>
       </div>
     `;
 
