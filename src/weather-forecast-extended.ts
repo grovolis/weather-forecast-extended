@@ -972,12 +972,6 @@ export class WeatherForecastExtended extends LitElement {
       </div>
     `;
 
-    const debugOverlayTemplate = html`
-      <div class="debug-overlay">
-        <span class="debug-overlay-tag">rc5</span>
-      </div>
-    `;
-
     return html`
       <ha-card style=${cardStyle}>
         ${showHeader
@@ -1012,7 +1006,6 @@ export class WeatherForecastExtended extends LitElement {
                     ${showInlineNowcast ? nowcastPanelTemplate : nothing}
                   `}
               </div>
-              ${debugOverlayTemplate}
             </div>
           `
           : nothing}

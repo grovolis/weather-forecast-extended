@@ -19,7 +19,6 @@ ha-card {
   color: white;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
 .weather.header-only {
@@ -872,29 +871,3 @@ ha-card {
   paint-order: stroke;
 }
 
-/* ---- Build-ID overlay (rc5) ----------------------------------------------
-   Small badge in the bottom-right of .weather to confirm which build is
-   loaded on the device. Remove before the final release. The full
-   diagnostic overlay used in rc3/rc4 has served its purpose — the bug is
-   identified (rgba-rasterizer dropped, compositor-opacity honored) and
-   the fix is in place on all five pills.
-*/
-.weather .debug-overlay {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  z-index: 10;
-  pointer-events: none;
-  user-select: none;
-}
-
-.weather .debug-overlay .debug-overlay-tag {
-  background-color: rgb(220, 40, 40);
-  color: white;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 11px;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-}
-/* ---- end Build-ID overlay ----------------------------------------------- */
